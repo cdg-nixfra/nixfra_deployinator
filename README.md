@@ -1,21 +1,23 @@
 # NixfraDeployinator
 
-**TODO: Add description**
+Deployment daemon for Nixfra.
 
-## Installation
+Looks at an S3 paths to find what needs to be run. It copies that as a nix
+closure, runs a migration if it exists, then does a rolling upgrade. It
+uses libcluster to cluster and a global lock over the upgrade so that only
+one system at the time gets upgraded.
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `nixfra_deployinator` to your list of dependencies in `mix.exs`:
+Upgrades are staggered using global locks. Libcluster can be used to cluster
+systems that need to be staggered.
 
-```elixir
-def deps do
-  [
-    {:nixfra_deployinator, "~> 0.1.0"}
-  ]
-end
-```
+Process:
+* Remove from ALB (if configured)
+* Take down old system
+* Bring up new system
+* Wait for health checks
+* Add back to ALB
 
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at <https://hexdocs.pm/nixfra_deployinator>.
-
+If health check not available in a minute or so,
+* Bring up old system
+* Wait for health checks
+* Add back to ALB

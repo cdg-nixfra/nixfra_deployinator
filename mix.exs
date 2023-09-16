@@ -22,6 +22,7 @@ defmodule NixfraDeployinator.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:erlexec, "~> 2.0"},
       {:ex_aws, "~> 2.5"},
       {:ex_aws_elastic_load_balancing, "~> 2.1"},
       {:ex_aws_s3, "~> 2.4"},

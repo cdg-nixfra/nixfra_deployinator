@@ -11,7 +11,10 @@ defmodule NixfraDeployinator.Poller do
 
     poll_version = load_s3()
 
-    write_state(state)
+    if poll_version != state.version do
+      NixfraDeployinator.run_upgrade()
+      write_state(%State{state | version: poll_version})
+    end
   end
 
   def load_state() do
