@@ -5,7 +5,9 @@ defmodule NixfraDeployinator.Application do
   def start(_, _) do
     configure()
 
-    children = []
+    children = [
+      NixfraDeployinator.Service
+    ]
 
     Supervisor.start_link(children, strategy: :one_for_one)
   end

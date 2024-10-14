@@ -24,7 +24,6 @@ defmodule NixfraDeployinator.MixProject do
     [
       {:erlexec, "~> 2.0"},
       {:ex_aws, "~> 2.5"},
-      {:ex_aws_elastic_load_balancing, "~> 2.1"},
       {:ex_aws_s3, "~> 2.4"},
       {:hackney, "~> 1.18"},
       {:libcluster, "~> 3.3"},

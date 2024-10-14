@@ -12,15 +12,24 @@ defmodule NixfraDeployinator.Poller do
     poll_version = load_s3()
 
     if poll_version != state.version do
-      NixfraDeployinator.run_upgrade()
+      NixfraDeployinator.Deployer.run_upgrade(
+        state.version,
+        poll_version
+      )
+
       write_state(%State{state | version: poll_version})
     end
   end
 
   def load_state() do
-    @state_file
-    |> File.read!()
-    |> :erlang.binary_to_term()
+    if File.exists?(@state_file) do
+      @state_file
+      |> File.read!()
+      |> :erlang.binary_to_term()
+    else
+      File.mkdir_p!(@state_dir)
+      nil
+    end
   end
 
   def write_state(state) do
